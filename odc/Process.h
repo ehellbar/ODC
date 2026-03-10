@@ -11,8 +11,13 @@
 
 #include <boost/asio.hpp>
 #include <boost/asio/deadline_timer.hpp>
+#if __has_include(<boost/process/v1.hpp>)
+#include <boost/process/v1.hpp>
+namespace bp = boost::process::v1;
+#else
 #include <boost/process.hpp>
-
+namespace bp = boost::process;
+#endif
 #include <chrono>
 #include <iterator>
 #include <stdexcept>
@@ -21,7 +26,6 @@
 #include <vector>
 #include <utility> // pair
 
-namespace bp = boost::process;
 namespace ba = boost::asio;
 
 struct ExecuteResult
@@ -42,7 +46,7 @@ inline pid_t execute(const std::string& cmd,
                      const std::vector<std::pair<std::string, std::string>>& extraEnv = {})
 {
     try {
-        ba::io_service ios;
+        ba::io_context ios;
         bp::async_pipe outPipe(ios);
         bp::async_pipe errPipe(ios);
         ba::streambuf outBuf;

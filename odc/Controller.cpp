@@ -18,7 +18,13 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#if __has_include(<boost/process/v1.hpp>)
+#include <boost/process/v1.hpp>
+namespace bp = boost::process::v1;
+#else
 #include <boost/process.hpp>
+namespace bp = boost::process;
+#endif
 
 #include <algorithm>
 #include <cctype> // std::tolower
